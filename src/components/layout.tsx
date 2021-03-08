@@ -1,13 +1,14 @@
  import { FC, ReactNode } from "react";
  import Link from "next/link";
-// import { useAuth } from "src/auth/useAuth";
+ import { useAuth } from "src/auth/useAuth";
 
 interface Iprops {
     main: ReactNode
 }
 
 const Layout: FC<Iprops> = ({main}) => {
-    const authenticated = false
+    const { authenticated, logOut } = useAuth()
+    
     return (
         <div className='bg-gray-900 max-w-screen-2xl mx-auto text-white'>
             <nav className='bg-gray-800' style={{height: '64px'}}>
@@ -19,14 +20,14 @@ const Layout: FC<Iprops> = ({main}) => {
                             className='inline w-6'/>
                         </a>
                     </Link>
-                    {authenticated ? <>
+                    {authenticated ? (<>
                     <Link href='/houses/add'>
                         <a>
                             Add house
                         </a>
                     </Link>
                     <button onClick={() => {}}>Log out</button>
-                    </> : (
+                    </> ): (
                         <Link href='auth'>
                             <a> Login/Signup</a>
                         </Link>

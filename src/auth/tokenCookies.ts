@@ -1,3 +1,15 @@
-// import cookies from "js-cookie";
+ import cookies from "js-cookie";
 
-export {};
+export function getTokenCookie() {
+    return cookies.get()
+}
+
+export function setTokenCookie(token: string) {
+    return cookies.set('token', token, {
+        expires: 1/24
+    })
+}
+
+export function removeTokenCookie() {
+    return cookies.remove('token')
+}
