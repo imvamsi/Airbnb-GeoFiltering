@@ -6,7 +6,7 @@ interface Iprops {
     main: ReactNode
 }
 
-function Layout({main}: Iprops): React.ReactElement{
+const Layout: FC<Iprops> = ({main}) => {
     const authenticated = false
     return (
         <div className='bg-gray-900 max-w-screen-2xl mx-auto text-white'>
