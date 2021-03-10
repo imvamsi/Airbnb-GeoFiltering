@@ -11,16 +11,23 @@ const firebaseAuthConfig = {
             requireDisplayName: false
         }
     ],
-    signInSuccessfulUrl: '/'
+    signInSuccessUrl: '/'
 }
 
 const FirebaseAuth: FC = () => {
+
+    const [renderAuth, setRenderAuth] = useState(false)
+
+    useEffect(() => {
+        setRenderAuth(true)
+    }, [])
+
     return (
         <div className='mt-16'>
-            <StyledFirebaseAuth
+            {renderAuth ? <StyledFirebaseAuth
                 uiConfig={firebaseAuthConfig}
                 firebaseAuth={firebase.auth()}
-            />
+            />: null}
         </div>
     )
 }

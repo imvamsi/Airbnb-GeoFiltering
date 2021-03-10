@@ -26,7 +26,7 @@ const Layout: FC<Iprops> = ({main}) => {
                             Add house
                         </a>
                     </Link>
-                    <button onClick={() => {}}>Log out</button>
+                    <button onClick={logOut}>Log out</button>
                     </> ): (
                         <Link href='auth'>
                             <a> Login/Signup</a>
