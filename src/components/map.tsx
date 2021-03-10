@@ -12,11 +12,11 @@ interface MapProps {
 }
 
 export default function Map(props: MapProps) {
-    const mapref = useRef<ReactMapGL | null>(null)
+    const mapRef = useRef<ReactMapGL | null>(null)
     const [viewPort, setViewPort] = useState<ViewState>({
-        latitude: 45,
-        longitude: -65,
-        zoom: 10
+        latitude: 43,
+        longitude: -79,
+        zoom: 8
     })
 
     function handleViewPort(viewPort: ViewportProps): void {
@@ -31,6 +31,10 @@ export default function Map(props: MapProps) {
                 height= 'calc(100vh - 64px)'
                 mapboxApiAccessToken= {process.env.NEXT_PUBLIC_MAPBOX_API_TOKEN}
                 onViewportChange={viewPort => handleViewPort(viewPort)}
+                ref={instance => mapRef.current = instance}
+                minZoom={5}
+                maxZoom={15}
+                mapStyle='mapbox://styles/imvamsi/ckm3y1161c2p717op6vfwld8k'
             >
 
             </ReactMapGL>
