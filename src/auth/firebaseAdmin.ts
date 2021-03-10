@@ -12,7 +12,9 @@ const verifyIdToken = (token: string) => {
         })
     })
     }
-    return admin.auth().verifyIdToken(token).catch(() => null)
+    return admin.auth()
+                .verifyIdToken(token)
+                .catch(() => null)
 }
 
 export const loadIdToken = async(req: NextApiRequest): Promise<string | null> => {
