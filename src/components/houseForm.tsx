@@ -28,6 +28,7 @@ export default function HouseForm({}: FormProps) {
 
     const [submitting, setSubmitting] = useState(false)
     const {register, watch, errors, handleSubmit, setValue} = useForm<FormData>({defaultValues: {}})
+    const address = watch('address')
 
     useEffect(() => {
         register({name: 'address'}, {required: 'Please enter your address to begin with!'})
@@ -61,6 +62,7 @@ export default function HouseForm({}: FormProps) {
                 defaultValue=""
                 />
                 {errors.address && <p>{errors.address.message}</p>}
+                {address && <p>{address}</p>}
             </div>
         </form>
     )

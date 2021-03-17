@@ -44,7 +44,16 @@ function ReadySearchBox({onSelectAddress, defaultValue}: SearchBoxProps) {
   }
 
   async function handleSelect(address: string) {
-    console.log({address}, 'address')
+    setValue(address, false)
+    clearSuggestions()
+
+    try {
+      const results = await getGeocode({address})
+      const {lat, lng} = await getLatLng(results[0])
+      onSelectAddress(address, lat, lng)
+    } catch(err) {
+      console.error(`Error:`, err )
+    }
   }
 
   console.log({status, data}, 'suggestions')
