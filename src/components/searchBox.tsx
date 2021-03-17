@@ -38,16 +38,33 @@ export function SearchBox({onSelectAddress, defaultValue}: SearchBoxProps) {
 function ReadySearchBox({onSelectAddress, defaultValue}: SearchBoxProps) {
   const {ready, value, setValue, suggestions: {status, data}, clearSuggestions} = usePlacesAutocomplete({debounce: 300, defaultValue})
 
-  function handleSelect() {}
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    if(e.target.value === '') onSelectAddress('', null, null)
+    else setValue(e.target.value)
+  }
 
-  function handleChange() {}
+  async function handleSelect(address: string) {
+    console.log({address}, 'address')
+  }
 
+  console.log({status, data}, 'suggestions')
   return (
     <Combobox onSelect={handleSelect}>
       <ComboboxInput id='search' value={value} onChange={handleChange}
+        disabled={!ready}
         placeholder='Search for your location'
         className='w-full p-2'
+        autoComplete='off'
       />
+      <ComboboxPopover>
+        <ComboboxList>
+          { status === 'OK' &&
+            data?.map(({place_id, description}) => (
+                <ComboboxOption key={place_id} value={description}/>
+            ))
+          }
+        </ComboboxList>
+      </ComboboxPopover>
     </Combobox>
   )
 }
