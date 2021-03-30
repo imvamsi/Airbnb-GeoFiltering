@@ -1,6 +1,6 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
-// import { useMutation, gql } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 // import { useRouter } from "next/router";
 import Link from "next/link";
 // import { Image } from "cloudinary-react";
@@ -13,8 +13,16 @@ import { SearchBox } from "./searchBox";
 //   UpdateHouseMutation,
 //   UpdateHouseMutationVariables,
 // } from "src/generated/UpdateHouseMutation";
-// import { CreateSignatureMutation } from "src/generated/CreateSignatureMutation";
+import { createSignatureMutation } from "src/generated/createSignatureMutation";
 
+const SIGNATURE_MUTATION = gql`
+  mutation createSignatureMutation {
+    createImageSignature {
+      signature
+      timestamp
+    }
+  }
+`;
 interface FormData {
   address: string;
   latitude: number;
@@ -32,6 +40,9 @@ export default function HouseForm({}: FormProps) {
     { defaultValues: {} }
   );
   const address = watch("address");
+  const [createSignature] = useMutation<createSignatureMutation>(
+    SIGNATURE_MUTATION
+  );
 
   useEffect(() => {
     register(
@@ -43,7 +54,8 @@ export default function HouseForm({}: FormProps) {
   }, [register]);
 
   async function handleCreate(data: FormData) {
-    console.log(data, "formData");
+    const { data: signatureData } = await createSignature();
+    if (signatureData) console.log(signatureData);
   }
 
   function onSubmit(data: FormData) {
