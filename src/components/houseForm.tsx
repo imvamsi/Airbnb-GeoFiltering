@@ -33,6 +33,29 @@ interface FormData {
 
 interface FormProps {}
 
+interface UploadImageResponse {
+  secure_url: string;
+}
+
+async function uploadImage(
+  image: File,
+  signature: string,
+  timestamp: number
+): Promise<UploadImageResponse> {
+  const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
+  const formData = new FormData();
+  formData.append("file", image);
+  formData.append("signature", signature);
+  formData.append("timestamp", timestamp.toString());
+  formData.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_KEY ?? "");
+
+  const response = await fetch(url, {
+    method: "post",
+    body: formData,
+  });
+  return response.json();
+}
+
 export default function HouseForm({}: FormProps) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [previewImage, setPreviewImage] = useState<string>();
@@ -55,7 +78,11 @@ export default function HouseForm({}: FormProps) {
 
   async function handleCreate(data: FormData) {
     const { data: signatureData } = await createSignature();
-    if (signatureData) console.log(signatureData);
+    if (signatureData) {
+      const { signature, timestamp } = signatureData.createImageSignature;
+      const imageData = await uploadImage(data.image[0], signature, timestamp);
+      console.log(imageData);
+    }
   }
 
   function onSubmit(data: FormData) {
