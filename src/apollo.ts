@@ -13,3 +13,8 @@ function createApolloClient() {
         }
     })
 }
+
+export function useApollo() {
+    const client = useMemo(() => createApolloClient(), [])
+    return client
+}
