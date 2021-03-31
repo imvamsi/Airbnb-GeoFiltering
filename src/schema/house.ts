@@ -44,6 +44,7 @@ class HouseInput {
   bedrooms!: number;
 }
 
+@ObjectType()
 class House {
   @Field((_type) => ID)
   id!: number;
