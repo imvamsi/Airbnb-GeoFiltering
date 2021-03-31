@@ -1,6 +1,6 @@
 # About
 
-> Inspired from Airbnb, Sonder style of geo-filtering data! This app is basically about filtering the data based on the bounding box of the map! So, when the bounds are moved the list will only display the houses that are available in the respective map bounds
+Inspired from Airbnb, Sonder style of geo-filtering data! This app is basically about filtering the data based on the bounding box of the map! So, when the bounds are moved the list will only display the houses that are available in the respective map bounds
 
 
 ### What are the Features?
