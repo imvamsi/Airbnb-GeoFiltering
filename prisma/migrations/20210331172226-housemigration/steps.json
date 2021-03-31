@@ -1,0 +1,17 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "UpdateField",
+      "model": "House",
+      "field": "latitude",
+      "type": "Float"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "House",
+      "field": "longitude",
+      "type": "Float"
+    }
+  ]
+}

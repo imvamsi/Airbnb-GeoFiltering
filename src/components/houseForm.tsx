@@ -1,25 +1,34 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, gql } from "@apollo/client";
-// import { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import Link from "next/link";
 // import { Image } from "cloudinary-react";
 import { SearchBox } from "./searchBox";
-// import {
-//   CreateHouseMutation,
-//   CreateHouseMutationVariables,
-// } from "src/generated/CreateHouseMutation";
+import {
+  createHouseMutation,
+  createHouseMutationVariables,
+} from "src/generated/createHouseMutation";
 // import {
 //   UpdateHouseMutation,
 //   UpdateHouseMutationVariables,
 // } from "src/generated/UpdateHouseMutation";
 import { createSignatureMutation } from "src/generated/createSignatureMutation";
+import router from "next/router";
 
 const SIGNATURE_MUTATION = gql`
   mutation createSignatureMutation {
     createImageSignature {
       signature
       timestamp
+    }
+  }
+`;
+
+const CREATE_HOUSE_MUTATION = gql`
+  mutation createHouseMutation($input: HouseInput!) {
+    createHouse(input: $input) {
+      id
     }
   }
 `;
@@ -57,6 +66,7 @@ async function uploadImage(
 }
 
 export default function HouseForm({}: FormProps) {
+  const router = useRouter();
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [previewImage, setPreviewImage] = useState<string>();
   const { register, watch, errors, handleSubmit, setValue } = useForm<FormData>(
@@ -66,6 +76,11 @@ export default function HouseForm({}: FormProps) {
   const [createSignature] = useMutation<createSignatureMutation>(
     SIGNATURE_MUTATION
   );
+
+  const [createHouse] = useMutation<
+    createHouseMutation,
+    createHouseMutationVariables
+  >(CREATE_HOUSE_MUTATION);
 
   useEffect(() => {
     register(
@@ -81,7 +96,23 @@ export default function HouseForm({}: FormProps) {
     if (signatureData) {
       const { signature, timestamp } = signatureData.createImageSignature;
       const imageData = await uploadImage(data.image[0], signature, timestamp);
-      console.log(imageData);
+
+      const { data: houseData } = await createHouse({
+        variables: {
+          input: {
+            address: data.address,
+            image: imageData.secure_url,
+            coordinates: {
+              latitude: data.latitude,
+              longitude: data.longitude,
+            },
+            bedrooms: parseInt(data.bedrooms, 10),
+          },
+        },
+      });
+
+      if (houseData?.createHouse)
+        router.push(`/houses/${houseData.createHouse.id}`);
     }
   }
 

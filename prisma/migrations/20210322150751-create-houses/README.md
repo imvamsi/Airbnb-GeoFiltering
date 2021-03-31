@@ -47,8 +47,8 @@ migration ..20210322150751-create-houses
 +  id        Int      @id @default(autoincrement())
 +  userId    String   @map(name: "user_id")
 +  image     String
-+  latitude  String
-+  longitude String
++  latitude  Float
++  longitude Float
 +  address   String
 +  bedrooms  Int
 +  createdAt DateTime @default(now()) @map(name: "created_at")
@@ -58,5 +58,3 @@ migration ..20210322150751-create-houses
 +  @@map(name: "houses")
 +}
 ```
-
-
