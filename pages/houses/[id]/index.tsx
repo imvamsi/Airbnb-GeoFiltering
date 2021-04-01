@@ -49,6 +49,22 @@ function HouseData({ id }: { id: string }) {
         <div className="sm:block md:flex">
           <div className="sm:w-full md:w-1/2 p-4">
             <h1 className="text-3xl my-3">{house?.address}</h1>
+            <Image
+              className="pb-2"
+              cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
+              publicId={house?.publicId}
+              alt={house?.address}
+              secure
+              dpr="auto"
+              quality="auto"
+              width={900}
+              height={Math.floor((9 / 16) * 900)}
+              crop="fill"
+              gravity="auto"
+            />
+            <p>
+              {house?.bedrooms} 🛏️ <span className="ml-1">house</span>
+            </p>
           </div>
           <div className="sm:w-full md:w-1/2 p-4">SingleMap</div>
         </div>
