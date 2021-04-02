@@ -4,9 +4,9 @@ import { useDebounce } from "use-debounce";
 import Layout from "src/components/layout";
 import Map from "src/components/map";
 // import HouseList from "src/components/houseList";
-// import { useLastData } from "src/utils/useLastData";
 import { useLocalState } from "src/utils/useLocalState";
-// import { HousesQuery, HousesQueryVariables } from "src/generated/HousesQuery";
+import { HousesQuery, HousesQueryVariables } from "src/generated/HousesQuery";
+import { useLastData } from "../src/utils/useLastData";
 
 const HOUSES_QUERY = gql`
   query HousesQuery($bounds: BoundsInput!) {
@@ -20,20 +20,22 @@ const HOUSES_QUERY = gql`
     }
   }
 `;
-type Bounds = [[number, number], [number, number]];
+type BoundsArray = [[number, number], [number, number]];
 
-function parseBounds(bounds: string) {
-  const boundsResult = JSON.parse(bounds) as Bounds;
+function parseBounds(boundsString: string) {
+  // if (boundsString !== undefined) {
+  const bounds = JSON.parse(boundsString) as BoundsArray;
   return {
     sw: {
-      latitude: boundsResult[0][1],
-      longitude: boundsResult[0][0],
+      latitude: bounds[0][1],
+      longitude: bounds[0][0],
     },
     ne: {
-      latitude: boundsResult[1][1],
-      longitude: boundsResult[1][0],
+      latitude: bounds[1][1],
+      longitude: bounds[1][0],
     },
   };
+  // }
 }
 export default function Home() {
   const [dataBounds, setDataBounds] = useLocalState<string>(
@@ -42,11 +44,23 @@ export default function Home() {
   );
 
   const [debouncedDataBounds] = useDebounce(dataBounds, 200);
-  const { data, error } = useQuery(HOUSES_QUERY, {
-    variables: {
-      bounds: parseBounds(debouncedDataBounds),
-    },
-  });
+  console.log(
+    "🚀 ~ file: index.tsx ~ line 48 ~ Home ~ debouncedDataBounds",
+    debouncedDataBounds
+  );
+  const { data, error } = useQuery<HousesQuery, HousesQueryVariables>(
+    HOUSES_QUERY,
+    {
+      variables: {
+        bounds: debouncedDataBounds && parseBounds(debouncedDataBounds),
+      },
+    }
+  );
+  const lastData = useLastData(data);
+  if (error) return <Layout main={<div>Error loading houses</div>} />;
+
+  console.log(data, "bounds data");
+  console.log(lastData, "house in the bounds");
 
   return (
     <Layout
