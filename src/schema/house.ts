@@ -75,7 +75,7 @@ class House {
   bedrooms!: number;
 
   @Field((_type) => [House])
-  async nearbyHouses(@Ctx() ctx: Context) {
+  async nearby(@Ctx() ctx: Context) {
     const bounds = getBoundsOfDistance(
       {
         latitude: this.latitude,
