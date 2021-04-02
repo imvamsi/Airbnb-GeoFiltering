@@ -16,10 +16,6 @@ export default function Home() {
   );
 
   const [debouncedDataBounds] = useDebounce(dataBounds, 200);
-  console.log(
-    "🚀 ~ file: index.tsx ~ line 19 ~ Home ~ debouncedDataBounds",
-    debouncedDataBounds
-  );
 
   return (
     <Layout
