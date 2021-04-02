@@ -14,5 +14,5 @@ export function useLocalState<T = undefined>(key: string, initialValue: T) {
       window.localStorage.setItem(key, JSON.stringify(value));
   }, [value]);
 
-  return [value, setValue];
+  return [value, setValue] as [typeof value, typeof setValue];
 }
