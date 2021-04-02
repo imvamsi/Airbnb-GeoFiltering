@@ -14,6 +14,8 @@ export default function Home() {
     "bounds",
     "[[0, 0], [0,0]]"
   );
+
+  console.log(dataBounds, "DataBounds");
   return (
     <Layout
       main={

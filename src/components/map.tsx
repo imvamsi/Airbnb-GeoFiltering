@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState, ChangeEvent } from "react";
 import Link from "next/link";
 import { Image } from "cloudinary-react";
 import ReactMapGL, {
+  ExtraState,
   Marker,
   Popup,
   ViewportProps,
@@ -16,7 +17,7 @@ interface MapProps {
   setDataBounds: (bounds: string) => void;
 }
 
-export default function Map(props: MapProps) {
+export default function Map({ setDataBounds }: MapProps) {
   const mapRef = useRef<ReactMapGL | null>(null);
   const [viewPort, setViewPort] = useLocalState<ViewState>("viewport", {
     latitude: 45.5086157,
@@ -28,11 +29,17 @@ export default function Map(props: MapProps) {
     setViewPort(viewPort);
   }
 
-  function handleBounds() {
+  function handleBounds(): void {
     if (mapRef.current) {
       const bounds = mapRef.current.getMap().getBounds();
-      bounds.toArray();
-      console.log(bounds.toArray());
+      setDataBounds(JSON.stringify(bounds.toArray()));
+    }
+  }
+
+  function handleMapStateChange(extra: ExtraState): void {
+    if (extra.isDragging && mapRef.current) {
+      const bounds = mapRef.current.getMap().getBounds();
+      setDataBounds(JSON.stringify(bounds.toArray()));
     }
   }
 
@@ -48,7 +55,8 @@ export default function Map(props: MapProps) {
         minZoom={5}
         maxZoom={15}
         mapStyle="mapbox://styles/imvamsi/ckm3y1161c2p717op6vfwld8k"
-        onLoad={handleBounds()}
+        onLoad={() => handleBounds()}
+        onInteractionStateChange={(e) => handleMapStateChange(e)}
       ></ReactMapGL>
     </div>
   );
