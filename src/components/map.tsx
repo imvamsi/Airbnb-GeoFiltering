@@ -12,7 +12,9 @@ import { useLocalState } from "src/utils/useLocalState";
 // import { HousesQuery_houses } from "src/generated/HousesQuery";
 // import { SearchBox } from "./searchBox";
 
-interface MapProps {}
+interface MapProps {
+  setDataBounds: (bounds: string) => void;
+}
 
 export default function Map(props: MapProps) {
   const mapRef = useRef<ReactMapGL | null>(null);
@@ -24,6 +26,14 @@ export default function Map(props: MapProps) {
 
   function handleViewPort(viewPort: ViewportProps): void {
     setViewPort(viewPort);
+  }
+
+  function handleBounds() {
+    if (mapRef.current) {
+      const bounds = mapRef.current.getMap().getBounds();
+      bounds.toArray();
+      console.log(bounds.toArray());
+    }
   }
 
   return (
@@ -38,6 +48,7 @@ export default function Map(props: MapProps) {
         minZoom={5}
         maxZoom={15}
         mapStyle="mapbox://styles/imvamsi/ckm3y1161c2p717op6vfwld8k"
+        onLoad={handleBounds()}
       ></ReactMapGL>
     </div>
   );
