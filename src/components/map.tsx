@@ -22,7 +22,6 @@ export default function Map(props: MapProps) {
     zoom: 11,
   });
 
-  console.log(viewPort);
   function handleViewPort(viewPort: ViewportProps): void {
     setViewPort(viewPort);
   }
