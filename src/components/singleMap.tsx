@@ -65,11 +65,7 @@ export default function SingleMap({ house, nearby }: MapProps) {
           >
             <Link href={`/houses/${near.id}`}>
               <a style={{ width: "30px", height: "30px", fontSize: "30px" }}>
-                <img
-                  src="/home-outline.svg"
-                  className="w-8"
-                  alt="nearby house"
-                />
+                <img src="/home-solid.svg" className="w-8" alt="nearby house" />
               </a>
             </Link>
           </Marker>
