@@ -1,8 +1,8 @@
 // import { useState } from "react";
 // import { useQuery, gql } from "@apollo/client";
 // import { useDebounce } from "use-debounce";
- import Layout from "src/components/layout";
- import Map from "src/components/map";
+import Layout from "src/components/layout";
+import Map from "src/components/map";
 // import HouseList from "src/components/houseList";
 // import { useLastData } from "src/utils/useLastData";
 // import { useLocalState } from "src/utils/useLocalState";
@@ -10,16 +10,20 @@
 
 export default function Home() {
   return (
-    <Layout 
+    <Layout
       main={
-        <div className='flex'>
-          <div className='w-1/2 pb-4' style={{maxHeight: 'calc(100vh - 64px', overflowY: 'scroll'}}>
-              HouseList
+        <div className="flex">
+          <div
+            className="w-1/2 pb-4"
+            style={{ maxHeight: "calc(100vh - 64px", overflowY: "scroll" }}
+          >
+            HouseList
           </div>
-          <div className='w-1/2'>
-            <Map/>
+          <div className="w-1/2">
+            <Map />
           </div>
         </div>
-    }/>
-  )
+      }
+    />
+  );
 }

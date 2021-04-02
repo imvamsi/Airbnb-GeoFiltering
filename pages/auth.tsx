@@ -4,16 +4,15 @@ import { GetServerSideProps, NextApiRequest } from "next";
 import { loadIdToken } from "src/auth/firebaseAdmin";
 
 export default function Auth() {
-  return <Layout main={<FirebaseAuth/>}/>;
+  return <Layout main={<FirebaseAuth />} />;
 }
 
-export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
-  const uid = await loadIdToken(req as NextApiRequest)
-  if(uid) {
-    res.setHeader('location', '/')
-    res.statusCode = 302,
-    res.end()
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const uid = await loadIdToken(req as NextApiRequest);
+  if (uid) {
+    res.setHeader("location", "/");
+    (res.statusCode = 302), res.end();
   }
 
-  return {props: {}}
-}
+  return { props: {} };
+};
