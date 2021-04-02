@@ -42,6 +42,16 @@ export default function SingleMap({ house }: MapProps) {
         <div className="absolute top-0 left-0 p-4">
           <NavigationControl showCompass={false} />
         </div>
+        <Marker
+          latitude={house.latitude}
+          longitude={house.longitude}
+          offsetLeft={-15}
+          offsetTop={-15}
+        >
+          <button type="button">
+            <img src="/home-color.svg" className="w-8" />
+          </button>
+        </Marker>
       </ReactMapGL>
     </div>
   );
