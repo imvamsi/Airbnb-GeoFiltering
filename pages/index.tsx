@@ -1,6 +1,6 @@
 // import { useState } from "react";
 // import { useQuery, gql } from "@apollo/client";
-// import { useDebounce } from "use-debounce";
+import { useDebounce } from "use-debounce";
 import Layout from "src/components/layout";
 import Map from "src/components/map";
 // import HouseList from "src/components/houseList";
@@ -15,7 +15,12 @@ export default function Home() {
     "[[0, 0], [0,0]]"
   );
 
-  console.log(dataBounds, "DataBounds");
+  const [debouncedDataBounds] = useDebounce(dataBounds, 200);
+  console.log(
+    "🚀 ~ file: index.tsx ~ line 19 ~ Home ~ debouncedDataBounds",
+    debouncedDataBounds
+  );
+
   return (
     <Layout
       main={
