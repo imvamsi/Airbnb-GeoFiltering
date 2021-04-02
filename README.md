@@ -17,6 +17,7 @@ Inspired from Airbnb, Sonder style of geo-filtering data! This app is basically 
 - TailwindCSS
 - Prisma
 - GraphQL
+- type-graphql (to create schema and resolvers using typescript)
 - Firebase for Auth
 - Postgres(DB)
 - Apollo Client
