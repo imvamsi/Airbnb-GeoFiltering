@@ -8,7 +8,7 @@ import ReactMapGL, {
   ViewState,
 } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-// import { useLocalState } from "src/utils/useLocalState";
+import { useLocalState } from "src/utils/useLocalState";
 // import { HousesQuery_houses } from "src/generated/HousesQuery";
 // import { SearchBox } from "./searchBox";
 
@@ -16,12 +16,13 @@ interface MapProps {}
 
 export default function Map(props: MapProps) {
   const mapRef = useRef<ReactMapGL | null>(null);
-  const [viewPort, setViewPort] = useState<ViewState>({
+  const [viewPort, setViewPort] = useLocalState<ViewState>("viewport", {
     latitude: 45.5086157,
     longitude: -73.5903112,
     zoom: 11,
   });
 
+  console.log(viewPort);
   function handleViewPort(viewPort: ViewportProps): void {
     setViewPort(viewPort);
   }
