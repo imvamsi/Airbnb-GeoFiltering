@@ -9,6 +9,7 @@ import { useLocalState } from "src/utils/useLocalState";
 // import { HousesQuery, HousesQueryVariables } from "src/generated/HousesQuery";
 
 type Bounds = [[number, number], [number, number]];
+
 export default function Home() {
   const [dataBounds, setDataBounds] = useLocalState<string>(
     "bounds",
