@@ -41,6 +41,10 @@ const parseBounds = (boundsString: string) => {
 
 export default function Home() {
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
+  console.log(
+    "🚀 ~ file: index.tsx ~ line 44 ~ Home ~ highlightedId",
+    highlightedId
+  );
   const [dataBounds, setDataBounds] = useLocalState<string>(
     "bounds",
     "[[0,0],[0,0]]"
@@ -55,7 +59,6 @@ export default function Home() {
     }
   );
   const lastData = useLastData(data);
-  console.log("🚀 ~ file: index.tsx ~ line 58 ~ Home ~ lastData", lastData);
 
   if (error) return <Layout main={<div>Error loading houses</div>} />;
 
@@ -67,12 +70,16 @@ export default function Home() {
             className="w-1/2 pb-4"
             style={{ maxHeight: "calc(100vh - 64px)", overflowX: "scroll" }}
           >
-            <HouseList housesData={lastData ? lastData.houses : []} />
+            <HouseList
+              housesData={lastData ? lastData.houses : []}
+              setHighlightedId={setHighlightedId}
+            />
           </div>
           <div className="w-1/2">
             <Map
               setDataBounds={setDataBounds}
               houses={lastData ? lastData.houses : []}
+              highlightedId={highlightedId}
             />
           </div>
         </div>
