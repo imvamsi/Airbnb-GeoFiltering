@@ -41,10 +41,7 @@ const parseBounds = (boundsString: string) => {
 
 export default function Home() {
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
-  console.log(
-    "🚀 ~ file: index.tsx ~ line 44 ~ Home ~ highlightedId",
-    highlightedId
-  );
+
   const [dataBounds, setDataBounds] = useLocalState<string>(
     "bounds",
     "[[0,0],[0,0]]"
