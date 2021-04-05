@@ -8,14 +8,12 @@ interface HouseListProps {
 }
 
 export default function HouseList(props: HouseListProps) {
-  console.log("🚀 ~ file: houseList.tsx ~ line 14 ~ HouseList ~ houses", props);
-
   function handleMouseEnter(item) {
     props.setHighlightedId(item);
   }
 
   function handleMouseLeave() {
-    console.log();
+    props.setHighlightedId(null);
   }
 
   return (
