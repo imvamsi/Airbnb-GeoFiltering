@@ -47,14 +47,11 @@ export default function Home() {
     "[[0,0],[0,0]]"
   );
   const [debouncedDataBounds] = useDebounce(dataBounds, 200);
-  const { data, error } = useQuery<HousesQuery, HousesQueryVariables>(
-    HOUSES_QUERY,
-    {
-      variables: {
-        bounds: parseBounds(debouncedDataBounds),
-      },
-    }
-  );
+  const { data, error } = useQuery<HousesQueryVariables>(HOUSES_QUERY, {
+    variables: {
+      bounds: parseBounds(debouncedDataBounds),
+    },
+  });
   const lastData = useLastData(data);
 
   if (error) return <Layout main={<div>Error loading houses</div>} />;
