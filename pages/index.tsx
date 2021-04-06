@@ -6,7 +6,11 @@ import Map from "src/components/map";
 import HouseList from "src/components/houseList";
 import { useLastData } from "src/utils/useLastData";
 import { useLocalState } from "src/utils/useLocalState";
-import { HousesQuery, HousesQueryVariables } from "src/generated/HousesQuery";
+import {
+  HousesQuery_houses,
+  HousesQuery,
+  HousesQueryVariables,
+} from "src/generated/HousesQuery";
 
 const HOUSES_QUERY = gql`
   query HousesQuery($bounds: BoundsInput!) {
@@ -52,7 +56,9 @@ export default function Home() {
       bounds: parseBounds(debouncedDataBounds),
     },
   });
+
   const lastData = useLastData(data);
+  console.log("🚀 ~ file: index.tsx ~ line 56 ~ Home ~ lastData", lastData);
 
   if (error) return <Layout main={<div>Error loading houses</div>} />;
 
@@ -65,7 +71,7 @@ export default function Home() {
             style={{ maxHeight: "calc(100vh - 64px)", overflowX: "scroll" }}
           >
             <HouseList
-              housesData={lastData ? lastData.houses : []}
+              housesData={lastData ? lastData : []}
               setHighlightedId={setHighlightedId}
             />
           </div>
