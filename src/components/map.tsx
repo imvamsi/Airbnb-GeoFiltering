@@ -71,7 +71,7 @@ export default function Map({ setDataBounds, houses, highlightedId }: IProps) {
             defaultValue=""
             onSelectAddress={(_address, latitude, longitude) => {
               if (latitude && longitude) {
-                setViewport((old) => ({
+                setViewport((old: ViewState) => ({
                   ...old,
                   latitude,
                   longitude,

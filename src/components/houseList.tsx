@@ -3,14 +3,12 @@ import { Image } from "cloudinary-react";
 import { HousesQuery_houses } from "src/generated/HousesQuery";
 
 interface HouseListProps {
-  housesData: {
-    houses: HousesQuery_houses[];
-  };
+  houses: HousesQuery_houses[];
   setHighlightedId: (id: string | null) => void;
 }
 
 export default function HouseList(props: HouseListProps) {
-  function handleMouseEnter(item) {
+  function handleMouseEnter(item: string) {
     props.setHighlightedId(item);
   }
 
@@ -20,7 +18,7 @@ export default function HouseList(props: HouseListProps) {
 
   return (
     <>
-      {props.housesData?.houses?.map((house) => (
+      {props.houses?.map((house) => (
         <Link key={house.id} href={`/houses/${house.id}`}>
           <div
             className="px-6 pt-4 cursor-pointer flex flex-wrap"

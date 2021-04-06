@@ -6,11 +6,7 @@ import Map from "src/components/map";
 import HouseList from "src/components/houseList";
 import { useLastData } from "src/utils/useLastData";
 import { useLocalState } from "src/utils/useLocalState";
-import {
-  HousesQuery_houses,
-  HousesQuery,
-  HousesQueryVariables,
-} from "src/generated/HousesQuery";
+import { HousesQuery, HousesQueryVariables } from "src/generated/HousesQuery";
 
 const HOUSES_QUERY = gql`
   query HousesQuery($bounds: BoundsInput!) {
@@ -28,37 +24,33 @@ const HOUSES_QUERY = gql`
 type BoundsArray = [[number, number], [number, number]];
 
 const parseBounds = (boundsString: string) => {
-  if (boundsString !== undefined || null) {
-    const bounds = JSON.parse(boundsString) as BoundsArray;
-    return {
-      sw: {
-        latitude: bounds[0][1],
-        longitude: bounds[0][0],
-      },
-      ne: {
-        latitude: bounds[1][1],
-        longitude: bounds[1][0],
-      },
-    };
-  }
+  const bounds = JSON.parse(boundsString) as BoundsArray;
+  return {
+    sw: {
+      latitude: bounds[0][1],
+      longitude: bounds[0][0],
+    },
+    ne: {
+      latitude: bounds[1][1],
+      longitude: bounds[1][0],
+    },
+  };
 };
 
 export default function Home() {
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
-
   const [dataBounds, setDataBounds] = useLocalState<string>(
     "bounds",
     "[[0,0],[0,0]]"
   );
   const [debouncedDataBounds] = useDebounce(dataBounds, 200);
-  const { data, error } = useQuery<HousesQueryVariables>(HOUSES_QUERY, {
-    variables: {
-      bounds: parseBounds(debouncedDataBounds),
-    },
-  });
-
+  const { data, error } = useQuery<HousesQuery, HousesQueryVariables>(
+    HOUSES_QUERY,
+    {
+      variables: { bounds: parseBounds(debouncedDataBounds) },
+    }
+  );
   const lastData = useLastData(data);
-  console.log("🚀 ~ file: index.tsx ~ line 56 ~ Home ~ lastData", lastData);
 
   if (error) return <Layout main={<div>Error loading houses</div>} />;
 
@@ -71,7 +63,7 @@ export default function Home() {
             style={{ maxHeight: "calc(100vh - 64px)", overflowX: "scroll" }}
           >
             <HouseList
-              housesData={lastData ? lastData : []}
+              houses={lastData ? lastData.houses : []}
               setHighlightedId={setHighlightedId}
             />
           </div>
