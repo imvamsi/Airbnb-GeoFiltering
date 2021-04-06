@@ -52,8 +52,8 @@ function ReadySearchBox({ onSelectAddress, defaultValue }: SearchBoxProps) {
   } = usePlacesAutocomplete({ debounce: 300, defaultValue });
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    setValue(e.target.value);
     if (e.target.value === "") onSelectAddress("", null, null);
-    else setValue(e.target.value);
   }
 
   async function handleSelect(address: string) {
