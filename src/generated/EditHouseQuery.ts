@@ -16,6 +16,7 @@ export interface EditHouseQuery_house {
   latitude: number;
   longitude: number;
   publicId: string;
+  bedrooms: number;
 }
 
 export interface EditHouseQuery {
