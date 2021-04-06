@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { Image } from "cloudinary-react";
 import ReactMapGL, { Marker, Popup, ViewState, ExtraState } from "react-map-gl";
@@ -16,11 +16,26 @@ interface IProps {
 export default function Map({ setDataBounds, houses, highlightedId }: IProps) {
   const [selected, setSelected] = useState<HousesQuery_houses | null>(null);
   const mapRef = useRef<ReactMapGL | null>(null);
-  const [viewport, setViewport] = useLocalState<ViewState>("viewport", {
-    latitude: 43,
-    longitude: -79,
-    zoom: 10,
+
+  const [viewport, setViewport] = useState(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      const data = window.localStorage.getItem("viewport");
+      console.log(
+        "🚀 ~ file: map.tsx ~ line 28 ~ const[viewport,setViewport]=useState ~ data",
+        data
+      );
+
+      if (data) {
+        return JSON.parse(data);
+      }
+    }
+    return { latitude: 43, longitude: -79, zoom: 10 };
   });
+
+  useEffect(() => {
+    //const { latitude, longitude, zoom } = viewport;
+    localStorage.setItem("viewport", JSON.stringify(viewport));
+  }, [viewport]);
 
   function handleBounds(): void {
     if (mapRef.current) {
