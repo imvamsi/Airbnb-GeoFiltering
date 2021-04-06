@@ -5,11 +5,10 @@ import { loadIdToken } from "src/auth/firebaseAdmin";
 import Layout from "src/components/layout";
 import HouseForm from "src/components/houseForm";
 import { useAuth } from "src/auth/useAuth";
-// import {
-// import EditHouse from './edit';
-//EditHouseQuery,
-//   EditHouseQueryVariables,
-// } from "src/generated/EditHouseQuery";
+import {
+  EditHouseQuery,
+  EditHouseQueryVariables,
+} from "src/generated/EditHouseQuery";
 
 const EDIT_HOUSE_QUERY = gql`
   query EditHouseQuery($id: String!) {
@@ -35,7 +34,10 @@ export default function EditHouse() {
 }
 function EditHouseData({ id }: { id: string }) {
   const { user } = useAuth();
-  const { data, loading } = useQuery(EDIT_HOUSE_QUERY, { variables: { id } });
+  const { data, loading } = useQuery<EditHouseQuery, EditHouseQueryVariables>(
+    EDIT_HOUSE_QUERY,
+    { variables: { id } }
+  );
 
   if (!user) return <Layout main={<div>Please Login!</div>} />;
   if (loading) return <Layout main={<div>Loading...</div>} />;
