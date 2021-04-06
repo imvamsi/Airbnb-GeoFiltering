@@ -45,5 +45,17 @@ function EditHouseData({ id }: { id: string }) {
     return <Layout main={<div>Unable to load the house</div>} />;
   if (user.uid !== data?.house?.userId)
     return <Layout main={<div>Permission denied!</div>} />;
-  return <div> I have the permission</div>;
+  return <HouseForm house={data.house} />;
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const uid = await loadIdToken(req as NextApiRequest);
+
+  if (!uid) {
+    res.setHeader("location", "/");
+    res.statusCode = 302;
+    res.end();
+  }
+
+  return { props: {} };
+};

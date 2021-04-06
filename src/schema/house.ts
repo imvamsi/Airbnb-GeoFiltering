@@ -124,6 +124,29 @@ export class HouseResolver {
     });
   }
 
+  @Authorized()
+  @Mutation((_returns) => House, { nullable: true })
+  async updateHouse(
+    @Arg("id") id: string,
+    @Arg("input") input: HouseInput,
+    @Ctx() ctx: AuthorizedContext
+  ) {
+    const houseId = parseInt(id, 10);
+    const house = await ctx.prisma.house.findOne({ where: { id: houseId } });
+
+    if (!house || house.userId !== ctx.uid) return null;
+    return await ctx.prisma.house.update({
+      where: { id: houseId },
+      data: {
+        image: input.image,
+        address: input.address,
+        latitude: input.coordinates.latitude,
+        longitude: input.coordinates.longitude,
+        bedrooms: input.bedrooms,
+      },
+    });
+  }
+
   @Query((_returns) => House, { nullable: true })
   async house(@Arg("id") id: string, @Ctx() ctx: Context) {
     return ctx.prisma.house.findOne({ where: { id: parseInt(id, 10) } });
