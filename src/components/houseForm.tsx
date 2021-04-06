@@ -3,16 +3,16 @@ import { useForm } from "react-hook-form";
 import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import Link from "next/link";
-// import { Image } from "cloudinary-react";
+import { Image } from "cloudinary-react";
 import { SearchBox } from "./searchBox";
 import {
   createHouseMutation,
   createHouseMutationVariables,
 } from "src/generated/createHouseMutation";
-// import {
-//   UpdateHouseMutation,
-//   UpdateHouseMutationVariables,
-// } from "src/generated/UpdateHouseMutation";
+import {
+  updateHouseMutation,
+  updateHouseMutationVariables,
+} from "src/generated/updateHouseMutation";
 import { createSignatureMutation } from "src/generated/createSignatureMutation";
 import router from "next/router";
 
@@ -95,7 +95,16 @@ export default function HouseForm({ house }: FormProps) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [previewImage, setPreviewImage] = useState<string>();
   const { register, watch, errors, handleSubmit, setValue } = useForm<FormData>(
-    { defaultValues: {} }
+    {
+      defaultValues: house
+        ? {
+            address: house.address,
+            latitude: house.latitude,
+            longitude: house.longitude,
+            bedrooms: house?.bedrooms?.toString(),
+          }
+        : {},
+    }
   );
   const address = watch("address");
   const [createSignature] = useMutation<createSignatureMutation>(
@@ -106,6 +115,11 @@ export default function HouseForm({ house }: FormProps) {
     createHouseMutation,
     createHouseMutationVariables
   >(CREATE_HOUSE_MUTATION);
+
+  const [updateHouse] = useMutation<
+    updateHouseMutation,
+    updateHouseMutationVariables
+  >(UPDATE_HOUSE_MUTATION);
 
   useEffect(() => {
     register(
@@ -141,14 +155,58 @@ export default function HouseForm({ house }: FormProps) {
     }
   }
 
+  async function handleUpdate(currentData: House, newData: FormData) {
+    let image = currentData.image;
+
+    if (newData.image[0]) {
+      const { data: signatureData } = await createSignature();
+      if (signatureData) {
+        const { signature, timestamp } = signatureData.createImageSignature;
+        const imageData = await uploadImage(
+          newData.image[0],
+          signature,
+          timestamp
+        );
+        image = imageData.secure_url;
+      }
+    }
+
+    const { data: houseData } = await updateHouse({
+      variables: {
+        id: currentData.id,
+        input: {
+          address: newData.address,
+          image: image,
+          coordinates: {
+            latitude: newData.latitude,
+            longitude: newData.longitude,
+          },
+          bedrooms: parseInt(newData.bedrooms, 10),
+        },
+      },
+    });
+
+    if (houseData?.updateHouse) {
+      router.push(`/houses/${currentData.id}`);
+    }
+  }
+
   function onSubmit(data: FormData) {
     setSubmitting(true);
-    handleCreate(data);
+    if (!!house) {
+      handleUpdate(house, data);
+    } else {
+      handleCreate(data);
+    }
   }
 
   return (
     <form className="mx-auto max-w-xl py-4" onSubmit={handleSubmit(onSubmit)}>
-      <h1 className="text-xl">Add a new house</h1>
+      <h1 className="text-xl">
+        {house
+          ? `you are currently editing ${house.address}`
+          : "Add a new house"}
+      </h1>
       <div className="mt-4">
         <label htmlFor="search" className="block">
           Search for your address
@@ -159,7 +217,7 @@ export default function HouseForm({ house }: FormProps) {
             setValue("latitude", latitude);
             setValue("longitude", longitude);
           }}
-          defaultValue=""
+          defaultValue={house ? house.address : ""}
         />
         {errors.address && <p>{errors.address.message}</p>}
       </div>
@@ -181,7 +239,7 @@ export default function HouseForm({ house }: FormProps) {
               style={{ display: "none" }}
               ref={register({
                 validate: (fileList: FileList) => {
-                  if (fileList.length === 1) return true;
+                  if (house || fileList.length === 1) return true;
                   else return "Please Upload an Image";
                 },
               })}
@@ -196,13 +254,27 @@ export default function HouseForm({ house }: FormProps) {
                 }
               }}
             />
-            {previewImage && (
+            {previewImage ? (
               <img
                 src={previewImage}
                 className="mt-4 object-cover"
                 style={{ width: "576px", height: `${(9 / 16) * 576}px` }}
               />
-            )}
+            ) : house ? (
+              <Image
+                className="mt-4"
+                cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
+                publicId={house.publicId}
+                alt={house.address}
+                secure
+                dpr="auto"
+                quality="auto"
+                width={576}
+                height={Math.floor((9 / 16) * 576)}
+                crop="fill"
+                gravity="auto"
+              />
+            ) : null}
             {errors.image && <p>{errors.image.message}</p>}
           </div>
           <div className="mt-4">
@@ -233,7 +305,7 @@ export default function HouseForm({ house }: FormProps) {
             >
               Save
             </button>{" "}
-            <Link href="/">
+            <Link href={house ? `/houses/${house.id}` : "/"}>
               <a>Cancel</a>
             </Link>
           </div>

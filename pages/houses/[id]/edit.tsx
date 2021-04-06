@@ -20,6 +20,7 @@ const EDIT_HOUSE_QUERY = gql`
       latitude
       longitude
       publicId
+      bedrooms
     }
   }
 `;
