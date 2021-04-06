@@ -3,7 +3,7 @@ import { Image } from "cloudinary-react";
 import { HousesQuery_houses } from "src/generated/HousesQuery";
 
 interface HouseListProps {
-  houses: HousesQuery_houses[];
+  housesData: HousesQuery_houses[];
   setHighlightedId: (id: string | null) => void;
 }
 
