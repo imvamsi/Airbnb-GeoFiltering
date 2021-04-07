@@ -24,5 +24,5 @@ export interface HousesQuery {
 }
 
 export interface HousesQueryVariables {
-  bounds: BoundsInput;
+  bounds: BoundsInput | undefined;
 }

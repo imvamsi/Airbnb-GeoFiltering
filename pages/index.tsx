@@ -24,17 +24,19 @@ const HOUSES_QUERY = gql`
 type BoundsArray = [[number, number], [number, number]];
 
 const parseBounds = (boundsString: string) => {
-  const bounds = JSON.parse(boundsString) as BoundsArray;
-  return {
-    sw: {
-      latitude: bounds[0][1],
-      longitude: bounds[0][0],
-    },
-    ne: {
-      latitude: bounds[1][1],
-      longitude: bounds[1][0],
-    },
-  };
+  if (boundsString !== undefined) {
+    const bounds = JSON.parse(boundsString) as BoundsArray;
+    return {
+      sw: {
+        latitude: bounds[0][1],
+        longitude: bounds[0][0],
+      },
+      ne: {
+        latitude: bounds[1][1],
+        longitude: bounds[1][0],
+      },
+    };
+  }
 };
 
 export default function Home() {
@@ -47,7 +49,9 @@ export default function Home() {
   const { data, error } = useQuery<HousesQuery, HousesQueryVariables>(
     HOUSES_QUERY,
     {
-      variables: { bounds: parseBounds(debouncedDataBounds) },
+      variables: {
+        bounds: parseBounds(debouncedDataBounds),
+      },
     }
   );
   const lastData = useLastData(data);

@@ -20,10 +20,6 @@ export default function Map({ setDataBounds, houses, highlightedId }: IProps) {
   const [viewport, setViewport] = useState(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const data = window.localStorage.getItem("viewport");
-      console.log(
-        "🚀 ~ file: map.tsx ~ line 28 ~ const[viewport,setViewport]=useState ~ data",
-        data
-      );
 
       if (data) {
         return JSON.parse(data);
