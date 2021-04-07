@@ -6,7 +6,7 @@ Inspired from Airbnb, Sonder style of geo-filtering data! This app is basically 
 ### What are the Features?
 
 - User Authentication 
-- Create, update houses
+- Create, read, update, delete houses
 - View the created houses on map
 - Filter data based on the bounds
 
